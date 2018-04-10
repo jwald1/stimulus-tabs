@@ -2,19 +2,18 @@
 
 ### A simple tabs controller for Stimulus.js
 
-
-
+#### Please call `super` in `connect` or `initialize` callbacks if you use them.
 ## Basic Usage
 
 First run ` yarn add stimulus-tabs` to install
 
 ### Controller
-In your controller `import` and `extent` tabs-controller
+In your controller `extent` tabs-controller
 
 ```javascript
 // controllers/my_tabs_controller.js
 
-import { TabsController } from 'tabs-controller'
+import { TabsController } from 'stimulus-tabs'
 
 export default class extends TabsController {
 }

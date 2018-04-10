@@ -641,10 +641,9 @@ var defaultSchema = {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "TabsController", function() { return TabsController; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_stimulus__ = __webpack_require__(11);
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-function _toArray(arr) { return Array.isArray(arr) ? arr : Array.from(arr); }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -665,43 +664,48 @@ var TabsController = function (_Controller) {
 
   _createClass(TabsController, [{
     key: 'initialize',
+    // overwirde in subclass
     value: function initialize() {
       this.defineShowActions();
-    }
+    } // overwirde in subclass
+
   }, {
     key: 'connect',
     value: function connect() {
-      var _this2 = this;
-
-      var _constructor$tabs = _toArray(this.constructor.tabs),
-          firstTab = _constructor$tabs[0],
-          tabs = _constructor$tabs.slice(1);
-
-      if (firstTab) {
-        tabs.forEach(function (tabName) {
-          return _this2.hideTab(tabName);
-        });
-        this.showTab(firstTab);
-        this.previousTab = firstTab;
-        this.currentTab = firstTab;
-        this.initialSelected();
+      if (this.constructor.tabs.length !== 0) {
+        this.hideTabs();
+        this.showInitalTab();
       }
     }
   }, {
-    key: 'tabNames',
-    value: function tabNames() {}
+    key: 'hideTabs',
+    value: function hideTabs() {
+      var _this2 = this;
+
+      this.constructor.tabs.filter(function (tabName) {
+        return tabName !== _this2.initialTabName;
+      }).forEach(function (tabName) {
+        _this2.hideTabContent(tabName);
+      });
+    }
+  }, {
+    key: 'showInitalTab',
+    value: function showInitalTab() {
+      this.selectedTab = this.initialTabName;
+      this.showTabContent(this.initialTabName);
+    }
   }, {
     key: 'defineShowActions',
     value: function defineShowActions() {
       var _this3 = this;
 
       this.constructor.tabs.forEach(function (tabName) {
-        _this3['show' + _this3.capitalize(tabName)] = function () {
-          this.previousTab = this.data.get('currentTab');
-          this.currentTab = tabName;
+        _this3['show' + _this3.capitalize(tabName) + _this3.constructor.tabSuffix] = function () {
+          this.previousSelectedTab = this.data.get('selectedTab');
+          this.selectedTab = tabName;
 
-          this.hideTab(this.previousTab);
-          this.showTab(this.currentTab);
+          this.hideTabContent(this.previousSelectedTabContent);
+          this.showTabContent(this.selectedTabContent);
 
           this.selected();
         };
@@ -710,12 +714,7 @@ var TabsController = function (_Controller) {
   }, {
     key: 'selected',
     value: function selected() {
-      // overwirte in inherit
-    }
-  }, {
-    key: 'initialSelected',
-    value: function initialSelected() {
-      // overwirte in inherit
+      // overwirde in subclass
     }
   }, {
     key: 'capitalize',
@@ -725,60 +724,115 @@ var TabsController = function (_Controller) {
   }, {
     key: 'findTarget',
     value: function findTarget(elementOrSelector) {
+      var element = void 0;
+
       if (elementOrSelector instanceof Element) {
-        return elementOrSelector;
+        element = elementOrSelector;
+      } else if (this.targets.has(elementOrSelector + this.constructor.tabSuffix)) {
+        element = this.targets.find(elementOrSelector + this.constructor.tabSuffix);
       }
 
-      return this.targets.find(elementOrSelector);
+      return element;
     }
   }, {
-    key: 'hideTab',
-    value: function hideTab(elementOrSelector) {
-      this.findTarget(elementOrSelector).style.display = 'none';
+    key: 'toggleTabVisibility',
+    value: function toggleTabVisibility(elementOrSelector, show) {
+      var target = this.findTarget(elementOrSelector);
+
+      if (target) {
+        target.style.display = show ? '' : 'none';
+      }
     }
   }, {
-    key: 'showTab',
-    value: function showTab(elementOrSelector) {
-      this.findTarget(elementOrSelector).style.display = '';
+    key: 'hideTabContent',
+    value: function hideTabContent(elementOrSelector) {
+      this.toggleTabVisibility(elementOrSelector, false);
     }
   }, {
-    key: 'previousTab',
+    key: 'showTabContent',
+    value: function showTabContent(elementOrSelector) {
+      this.toggleTabVisibility(elementOrSelector, true);
+      this.setSelectedTabClass();
+    }
+  }, {
+    key: 'setSelectedTabClass',
+    value: function setSelectedTabClass() {
+      var selectedTabClass = this.constructor.selectedTabClass;
+
+      if (selectedTabClass && selectedTabClass.length > 0) {
+        this.selectedTab.classList.add(selectedTabClass);
+
+        if (this.previousSelectedTab) {
+          this.previousSelectedTab.classList.remove(selectedTabClass);
+        }
+      }
+    }
+  }, {
+    key: 'tabContent',
+    value: function tabContent(selectedOrPrevious) {
+      var tabName = this.data.get(selectedOrPrevious);
+
+      if (tabName) {
+        return this.targets.find(tabName + this.constructor.tabSuffix);
+      }
+    }
+  }, {
+    key: 'tabSelector',
+    value: function tabSelector(selectedOrPrevious) {
+      var tabName = this.data.get(selectedOrPrevious + 'Tab');
+
+      if (!tabName) {
+        return;
+      }
+
+      return '[data-action$=\'' + this.identifier + '#show' + this.capitalize(tabName) + this.constructor.tabSuffix + '\']';
+    }
+  }, {
+    key: 'initialTabName',
+    get: function get() {
+      return this.data.get('SelectedTab') || this.constructor.tabs[0];
+    }
+  }, {
+    key: 'previousSelectedTab',
     set: function set(tabName) {
-      this.data.set('previousTab', tabName);
+      this.data.set('previousSelectedTab', tabName);
     },
     get: function get() {
-      return this.targets.find(this.data.get('previousTab'));
-    }
-  }, {
-    key: 'currentTab',
-    set: function set(tabName) {
-      this.data.set('currentTab', tabName);
-    },
-    get: function get() {
-      return this.targets.find(this.data.get('currentTab'));
-    }
-  }, {
-    key: 'currentTabButton',
-    get: function get() {
-      var selector = '[data-action$=\'' + this.identifier + '#show' + this.capitalize(this.data.get('currentTab')) + '\']';
+      var selector = this.tabSelector('previousSelected');
+
       return this.element.querySelector(selector);
     }
   }, {
-    key: 'previousTabButton',
+    key: 'selectedTab',
+    set: function set(tabName) {
+      this.data.set('selectedTab', tabName);
+    },
     get: function get() {
-      var selector = '[data-action$=\'' + this.identifier + '#show' + this.capitalize(this.data.get('previousTab')) + '\']';
+      var selector = this.tabSelector('selected');
+
       return this.element.querySelector(selector);
+    }
+  }, {
+    key: 'previousSelectedTabContent',
+    get: function get() {
+      return this.tabContent('previousSelectedTab');
+    }
+  }, {
+    key: 'selectedTabContent',
+    get: function get() {
+      return this.tabContent('selectedTab');
     }
   }]);
 
   return TabsController;
 }(__WEBPACK_IMPORTED_MODULE_0_stimulus__["a" /* Controller */]);
 
-// export default TabsController
-
-
 TabsController.tabs = [];
-/* harmony default export */ __webpack_exports__["default"] = (TabsController);
+TabsController.selectedTabClass = '';
+TabsController.tabSuffix = 'Tab';
+
+
+
 
 /***/ }),
 /* 11 */

@@ -2,6 +2,8 @@ import { Controller } from "stimulus"
 
 class TabsController extends Controller {
   static tabs = [] // overwirde in subclass
+  static selectedTabClass = '' // overwirde in subclass
+  static tabSuffix = 'Tab'
 
   initialize() {
     this.defineShowActions()
@@ -9,30 +11,35 @@ class TabsController extends Controller {
 
   connect() {
     if (this.constructor.tabs.length !== 0) {
-      this.tabNames.forEach(tabName => this.hideTab(tabName))
-      this.showTab(this.initialTabName)
-      this.currentTab = this.initialTabName
-
-      this.initialSelected()
+      this.hideTabs()
+      this.showInitalTab()
     }
   }
 
-  get tabNames() {
-    return this.constructor.tabs.filter(tabName => tabName !== this.initialTabName)
+  hideTabs() {
+    this.constructor.tabs.filter(tabName => tabName !== this.initialTabName).
+      forEach(tabName => {
+        this.hideTabContent(tabName)
+      })
+  }
+
+  showInitalTab() {
+    this.selectedTab = this.initialTabName
+    this.showTabContent(this.initialTabName)
   }
 
   get initialTabName() {
-    return this.data.get('currentTab') || this.constructor.tabs[0]
+    return this.data.get('SelectedTab') || this.constructor.tabs[0]
   }
 
   defineShowActions() {
     this.constructor.tabs.forEach((tabName) => {
-      this['show' + this.capitalize(tabName)] = function() {
-        this.previousTab = this.data.get('currentTab')
-        this.currentTab = tabName
+      this['show' + this.capitalize(tabName) + this.constructor.tabSuffix] = function() {
+        this.previousSelectedTab = this.data.get('selectedTab')
+        this.selectedTab = tabName
 
-        this.hideTab(this.previousTab)
-        this.showTab(this.currentTab)
+        this.hideTabContent(this.previousSelectedTabContent)
+        this.showTabContent(this.selectedTabContent)
 
         this.selected()
       }
@@ -43,62 +50,96 @@ class TabsController extends Controller {
     // overwirde in subclass
   }
 
-  initialSelected() {
-    // overwirde in subclass
-  }
-
   capitalize(name) {
     return name.charAt(0).toUpperCase() + name.slice(1)
   }
 
   findTarget(elementOrSelector) {
+    let element
+
     if (elementOrSelector instanceof Element) {
-      return elementOrSelector
+      element = elementOrSelector
+    } else if (this.targets.has(elementOrSelector + this.constructor.tabSuffix)) {
+      element = this.targets.find(elementOrSelector + this.constructor.tabSuffix)
     }
 
-    return this.targets.find(elementOrSelector)
+    return element
   }
 
-  hideTab(elementOrSelector) {
-    this.findTarget(elementOrSelector).style.display = 'none'
-  }
+  toggleTabVisibility(elementOrSelector, show) {
+    const target = this.findTarget(elementOrSelector)
 
-  showTab(elementOrSelector) {
-    this.findTarget(elementOrSelector).style.display = ''
-  }
-
-  set previousTab(tabName) {
-    this.data.set('previousTab', tabName)
-  }
-
-  set currentTab(tabName) {
-    this.data.set('currentTab', tabName)
-  }
-
-  get previousTab() {
-    const previousTab = this.data.get('previousTab')
-
-    if (previousTab) {
-      return this.targets.find(previousTab)
+    if (target) {
+      target.style.display = show ? '' : 'none'
     }
   }
 
-  get currentTab() {
-    const currentTab = this.data.get('currentTab')
+  hideTabContent(elementOrSelector) {
+    this.toggleTabVisibility(elementOrSelector, false)
+  }
 
-    if (currentTab) {
-      return this.targets.find(currentTab)
+  showTabContent(elementOrSelector) {
+    this.toggleTabVisibility(elementOrSelector, true)
+    this.setSelectedTabClass()
+  }
+
+  setSelectedTabClass() {
+    const selectedTabClass = this.constructor.selectedTabClass
+
+    if (selectedTabClass && selectedTabClass.length > 0) {
+      this.selectedTab.classList.add(selectedTabClass)
+
+      if (this.previousSelectedTab) {
+        this.previousSelectedTab.classList.remove(selectedTabClass)
+      }
     }
   }
 
-  get currentTabButton() {
-    const selector = `[data-action$='${this.identifier}#show${this.capitalize(this.data.get('currentTab'))}']`
+  set previousSelectedTab(tabName) {
+    this.data.set('previousSelectedTab', tabName)
+  }
+
+  set selectedTab(tabName) {
+    this.data.set('selectedTab', tabName)
+  }
+
+  get previousSelectedTabContent() {
+    return this.tabContent('previousSelectedTab')
+  }
+
+  get selectedTabContent() {
+    return this.tabContent('selectedTab')
+  }
+
+  tabContent(selectedOrPrevious) {
+    const tabName = this.data.get(selectedOrPrevious)
+
+    if (tabName) {
+      return this.targets.find(tabName + this.constructor.tabSuffix)
+    }
+  }
+
+
+  get selectedTab() {
+    const selector = this.tabSelector('selected')
+
     return this.element.querySelector(selector)
   }
 
-  get previousTabButton() {
-    const selector = `[data-action$='${this.identifier}#show${this.capitalize(this.data.get('previousTab'))}']`
+  get previousSelectedTab() {
+    const selector = this.tabSelector('previousSelected')
+
     return this.element.querySelector(selector)
+  }
+
+  tabSelector(selectedOrPrevious) {
+    const tabName = this.data.get(selectedOrPrevious + 'Tab')
+
+    if (!tabName) {
+      return
+    }
+
+    return `[data-action$='${this.identifier}#show${this.capitalize(tabName)}${this.constructor.tabSuffix}']`
   }
 }
 
