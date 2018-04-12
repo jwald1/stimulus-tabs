@@ -19,7 +19,7 @@ export default class extends TabsController {
 }
 ```
 
-Add your tabs to the tabs array:
+Add your tabs to the tabs' array:
 ```javascript
 export default class extends TabsController {
   static tabs = ['business', 'personal'] // this can be any name

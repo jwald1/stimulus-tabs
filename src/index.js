@@ -29,12 +29,12 @@ class TabsController extends Controller {
   }
 
   get initialTabName() {
-    return this.data.get('SelectedTab') || this.constructor.tabs[0]
+    return this.data.get('selectedTab') || this.constructor.tabs[0]
   }
 
   defineShowActions() {
     this.constructor.tabs.forEach((tabName) => {
-      this['show' + this.capitalize(tabName) + this.constructor.tabSuffix] = function() {
+      this[this.actionMethodName(tabName)] = function() {
         this.previousSelectedTab = this.data.get('selectedTab')
         this.selectedTab = tabName
 
@@ -46,6 +46,9 @@ class TabsController extends Controller {
     })
   }
 
+  actionMethodName(tabName) {
+    return 'show' + this.capitalize(tabName) + this.constructor.tabSuffix
+  }
   selected() {
     // overwirde in subclass
   }
@@ -121,25 +124,22 @@ class TabsController extends Controller {
 
 
   get selectedTab() {
-    const selector = this.tabSelector('selected')
-
-    return this.element.querySelector(selector)
+    return this.tabElement('selected')
   }
 
   get previousSelectedTab() {
-    const selector = this.tabSelector('previousSelected')
-
-    return this.element.querySelector(selector)
+    return this.tabElement('previousSelected')
   }
 
-  tabSelector(selectedOrPrevious) {
+  tabElement(selectedOrPrevious) {
     const tabName = this.data.get(selectedOrPrevious + 'Tab')
 
     if (!tabName) {
       return
     }
-
-    return `[data-action$='${this.identifier}#show${this.capitalize(tabName)}${this.constructor.tabSuffix}']`
+    
+    const selector = `[data-action$='${this.identifier}#show${this.capitalize(tabName)}${this.constructor.tabSuffix}']`
+    return this.element.querySelector(selector)
   }
 }
 
