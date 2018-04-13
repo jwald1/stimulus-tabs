@@ -1,6 +1,6 @@
 import { Controller } from "stimulus"
 
-class TabsController extends Controller {
+export class TabsController extends Controller {
   static tabs = [] // overwirde in subclass
   static selectedTabClass = '' // overwirde in subclass
   static tabSuffix = 'Tab'
@@ -137,10 +137,8 @@ class TabsController extends Controller {
     if (!tabName) {
       return
     }
-    
+
     const selector = `[data-action$='${this.identifier}#show${this.capitalize(tabName)}${this.constructor.tabSuffix}']`
     return this.element.querySelector(selector)
   }
 }
-
-export { TabsController }

@@ -15,6 +15,7 @@ module.exports = function(config) {
     ],
 
     webpack: {
+      mode: 'development',
       module: {
         rules: [
           {
