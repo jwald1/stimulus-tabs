@@ -26,7 +26,7 @@ export default class extends TabsController {
 }
 ```
 
-Stimulus-tabs will define two action methods `showBusinessTab` and `showPersonalTab` which will show their corresponding tab's target
+Stimulus-tabs will define two action methods `showBusiness` and `showPersonal` which will show their corresponding tab's content
 
 You can also have a css class set on a selected by defining `selectedTabClass` as such
 
@@ -41,12 +41,12 @@ export default class extends TabsController {
 
 ```HTML
 <div data-controller="my-tabs">
-  <a data-action="my-tabs#showBusinessTab" href="#">Business tab</a>
-  <a data-action="my-tabs#showPersonalTab" href="#">Personal</a>
+  <a data-action="my-tabs#showBusiness" href="#">Business tab</a>
+  <a data-action="my-tabs#showPersonal" href="#">Personal</a>
 
   <div class="tabs-content">
-    <div data-target="my-tabs.businessTab">...</div>
-    <div data-target="my-tabs.personalTab">...</div>
+    <div data-target="my-tabs.business">...</div>
+    <div data-target="my-tabs.personal">...</div>
   </div>
 </div>
 ```
@@ -67,10 +67,10 @@ You can also set the first tab in the HTML as such:
 
 There are four getters which you can use (in a callback for example)
 
-1. `selectedTabContent` returns the selected tab's content element (the target)
+1. `selectedContent` returns the selected tab's content element (the target)
 2. `selectedTab` returns the selected tab element (button for example)
-3. `previousSelectedTabContent` previous returns the selected tab's content element (the target)
-4. `previousSelectedTab` returns the previous selected tab element (button for example)
+3. `previousContent` previous returns the selected tab's content element (the target)
+4. `previousTab` returns the previous tab element (button for example)
 
 ### callback
 
@@ -80,7 +80,7 @@ There is a `selected` callback which is called when one selects a tab
 selected() {
   const htmlContent = fetchSomeData()
 
-  this.selectedTabContent.appendChild(htmlContent)
+  this.selectedContent.appendChild(htmlContent)
 }
 ```
 
