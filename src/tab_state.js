@@ -30,13 +30,6 @@ export class TabState {
     this.selectedTab = tabName
   }
 
-  set previousTab(tabName) {
-    this.data.set('previousTab', tabName)
-  }
-
-  set selectedTab(tabName) {
-    this.data.set('selectedTab', tabName)
-  }
 
   get selectedTabName() {
     return this.data.get('selectedTab')
@@ -46,6 +39,13 @@ export class TabState {
     return this.data.get('previousTab')
   }
 
+  set previousTab(tabName) {
+    this.data.set('previousTab', tabName)
+  }
+
+  set selectedTab(tabName) {
+    this.data.set('selectedTab', tabName)
+  }
   findContent(tabName) {
     return this.targets.find(tabName)
   }
