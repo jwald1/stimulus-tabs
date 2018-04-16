@@ -6,10 +6,15 @@ export function defineShowActions(controllerConstructor) {
     if (!(actionMethodName(tabName) in prototype)) {
       prototype[actionMethodName(tabName)] = function() {
         this.tabState.setSelectedTab(tabName)
-        this.showSelectedTabContent()
-        this.addSelectedTabClass()
 
-        this.selected()
+        if (this.selectedTab !== this.previousTab) {
+          this.showSelectedTabContent()
+          this.addSelectedTabClass()
+
+          this.selected()
+          debugger
+        }
+
       }
     }
   })
