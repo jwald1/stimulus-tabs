@@ -74,6 +74,7 @@ describe('show actions', function(){
     const selected = sinon.stub(this.controller, 'selected')
 
     this.controller.showPersonal()
+    this.controller.showBusiness()
     expect(selected).to.have.been.called
   });
 })
