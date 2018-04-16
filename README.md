@@ -2,6 +2,7 @@
 
 ### A simple tabs controller for Stimulus.js
 
+[Codepen Demo](https://codepen.io/jwald1/pen/EEqxdg)
 #### Please call `super` in `connect` or `initialize` callbacks if you use them.
 ## Basic Usage
 
@@ -22,7 +23,7 @@ export default class extends TabsController {
 Add your tabs to the tabs' array:
 ```javascript
 export default class extends TabsController {
-  static tabs = ['business', 'personal'] // this can be any name
+  static tabs = ['business', 'personal']
 }
 ```
 
@@ -32,7 +33,7 @@ You can also have a css class set on a selected by defining `selectedTabClass` a
 
 ```javascript
 export default class extends TabsController {
-  static tabs = ['business', 'personal'] // this can be any name
+  static tabs = ['business', 'personal']
   static selectedTabClass = "CLASSNAME"
 }
 ```
@@ -85,6 +86,11 @@ selected() {
 ```
 
 For initial state please use Stimulus' `connect` callback, but you must call `super`
+
+### CSS
+
+Please don't hide the content elements with CSS or it won't work.
+You don't need any css for the tabs to work.
 
 ### TODO
 
