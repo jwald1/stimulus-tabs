@@ -18,7 +18,7 @@ if (env === 'build') {
 module.exports = {
   mode: 'development',
   entry: {
-    bundle: "./src/index.js"
+    bundle: "./src/tabs_controller.js"
   },
 
   output: {
