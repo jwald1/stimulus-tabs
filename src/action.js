@@ -4,7 +4,8 @@ export function defineShowActions(controllerConstructor) {
 
   tabs.forEach((tabName) => {
     if (!(actionMethodName(tabName) in prototype)) {
-      prototype[actionMethodName(tabName)] = function() {
+      prototype[actionMethodName(tabName)] = function(e) {
+        e && e.preventDefault()
         this.tabState.setSelectedTab(tabName)
 
         if (this.selectedTab !== this.previousTab) {
