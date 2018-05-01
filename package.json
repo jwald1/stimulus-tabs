@@ -1,7 +1,7 @@
 {
   "name": "stimulus-tabs",
   "description": "A simple tabs controller for Stimulus.js",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "author": "Jacob Wald",
   "main": "dist/tabs_controller.min.js",
   "license": "MIT",
