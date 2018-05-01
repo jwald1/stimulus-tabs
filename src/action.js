@@ -13,7 +13,6 @@ export function defineShowActions(controllerConstructor) {
           this.addSelectedTabClass()
 
           this.selected()
-          debugger
         }
 
       }
