@@ -3,7 +3,7 @@
   "description": "A simple tabs controller for Stimulus.js",
   "version": "1.0.1",
   "author": "Jacob Wald",
-  "main": "src/tabs_controller.js",
+  "main": "dist/tabs_controller.min.js",
   "license": "MIT",
   "scripts": {
     "start": "webpack --watch",

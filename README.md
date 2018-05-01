@@ -9,7 +9,7 @@
 First run ` yarn add stimulus-tabs` to install
 
 ### Controller
-In your controller `extent` tabs-controller
+In your controller extend tabs-controller
 
 ```javascript
 // controllers/my_tabs_controller.js
