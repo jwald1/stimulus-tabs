@@ -1,35 +1,41 @@
+const buble = require("rollup-plugin-buble")
+const resolve = require("rollup-plugin-node-resolve")
+const babel = require("rollup-plugin-babel")
+const commonjs = require("rollup-plugin-commonjs")
+
 module.exports = function(config) {
   config.set({
-
     // base path that will be used to resolve all patterns (eg. files, exclude)
-    basePath: '',
-    frameworks: ['mocha', 'fixture', 'sinon-chai'],
+    basePath: "",
+    frameworks: ["mocha", "fixture", "sinon-chai"],
 
     files: [
-      {pattern: 'spec/**/*_spec.js'},
-      'spec/fixtures/*.html'
+      "src/**/*.js",
+      { pattern: "spec/**/*_spec.js" },
+      { pattern: "spec/fixtures/*.html" }
     ],
 
-    // list of files / patterns to exclude
-    exclude: [
-    ],
+    preprocessors: {
+      "src/**/*.js": ["webpack", "sourcemap"],
+      "spec/**/*_spec.js": ["webpack", "sourcemap"],
+      "spec/fixtures/*.html": ["html2js"]
+    },
 
     webpack: {
-      mode: 'development',
+      mode: "development",
       module: {
         rules: [
           {
             test: /\.js$/,
-            exclude: [
-              /node_modules/
-            ],
-            use: [
-              { loader: "babel-loader" }
-            ]
+            exclude: [/node_modules/],
+            use: [{ loader: "babel-loader" }]
           }
         ]
       }
     },
+
+    // list of files / patterns to exclude
+    exclude: [],
 
     client: {
       chai: {
@@ -39,31 +45,21 @@ module.exports = function(config) {
 
     // preprocess matching files before serving them to the browser
     // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
-    preprocessors: {
-      'src/index.js': ['webpack', 'sourcemap'],
-      'spec/*.js': [ 'webpack', 'sourcemap' ],
-      'spec/fixtures/*.html': ['html2js']
-    },
-
 
     // test results reporter to use
     // possible values: 'dots', 'progress'
     // available reporters: https://npmjs.org/browse/keyword/karma-reporter
-    reporters: ['progress'],
-
+    reporters: ["progress"],
 
     // web server port
     port: 9876,
 
-
     // enable / disable colors in the output (reporters and logs)
     colors: true,
-
 
     // level of logging
     // possible values: config.LOG_DISABLE || config.LOG_ERROR || config.LOG_WARN || config.LOG_INFO || config.LOG_DEBUG
     logLevel: config.LOG_WARN,
-
 
     // enable / disable watching file and executing tests whenever any file changes
     autoWatch: false,
@@ -72,7 +68,7 @@ module.exports = function(config) {
     // available browser launchers: https://npmjs.org/browse/keyword/karma-launcher
 
     browsers: ["ChromeHeadless"],
-    reporters: ['mocha'],
+    reporters: ["mocha"],
     // if true, Karma captures browsers, runs the tests and exits
     singleRun: true,
 
