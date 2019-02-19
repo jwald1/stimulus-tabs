@@ -1,27 +1,26 @@
-export function defineShowActions(controllerConstructor) {
-  const tabs = controllerConstructor.tabs
+export function defineShowActions(controller) {
+  const controllerConstructor = controller.constructor
   const prototype = controllerConstructor.prototype
 
-  tabs.forEach((tabName) => {
+  controller._tabs.forEach(tabName => {
     if (!(actionMethodName(tabName) in prototype)) {
       prototype[actionMethodName(tabName)] = function(e) {
         e && e.preventDefault()
-        this.tabState.setSelectedTab(tabName)
+        this._tabState.setSelectedTab(tabName)
 
         if (this.selectedTab !== this.previousTab) {
-          this.showSelectedTabContent()
-          this.addSelectedTabClass()
+          this._showSelectedTabContent()
+          this._addSelectedTabClass()
 
           this.selected()
         }
-
       }
     }
   })
 }
 
 export function actionMethodName(tabName) {
-  return 'show' + capitalize(tabName)
+  return "show" + capitalize(tabName)
 }
 
 function capitalize(name) {
