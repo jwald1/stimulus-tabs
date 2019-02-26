@@ -1,4 +1,8 @@
-import { Controller } from 'stimulus';
+'use strict';
+
+Object.defineProperty(exports, '__esModule', { value: true });
+
+var stimulus = require('stimulus');
 
 function _classCallCheck(instance, Constructor) {
   if (!(instance instanceof Constructor)) {
@@ -380,12 +384,12 @@ function (_Controller) {
   }]);
 
   return TabsController;
-}(Controller);
+}(stimulus.Controller);
 
 defineProperty(TabsController, "tabs", []);
 
 defineProperty(TabsController, "selectedTabClass", "");
 
-export default TabsController;
-export { TabsController };
-//# sourceMappingURL=stimulus-controller.m.js.map
+exports.default = TabsController;
+exports.TabsController = TabsController;
+//# sourceMappingURL=tabs-controller.js.map

@@ -9,19 +9,19 @@ export default {
   external: ["stimulus"],
   output: [
     {
-      file: "dist/stimulus-controller.js",
+      file: "dist/tabs-controller.js",
       format: "cjs",
       name: "StimulusTabs",
       sourcemap: true
     },
     {
-      file: "dist/stimulus-controller.m.js",
+      file: "dist/tabs-controller.m.js",
       format: "es",
       name: "StimulusTabs",
       sourcemap: true
     },
     {
-      file: "dist/stimulus-controller.umd.js",
+      file: "dist/tabs-controller.umd.js",
       format: "umd",
       name: "StimulusTabs",
       sourcemap: true,

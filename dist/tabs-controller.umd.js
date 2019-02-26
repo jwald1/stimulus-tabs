@@ -396,4 +396,4 @@
   Object.defineProperty(exports, '__esModule', { value: true });
 
 }));
-//# sourceMappingURL=stimulus-controller.umd.js.map
+//# sourceMappingURL=tabs-controller.umd.js.map

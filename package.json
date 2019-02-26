@@ -1,12 +1,12 @@
 {
   "name": "stimulus-tabs",
   "description": "A simple tabs controller for Stimulus.js",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "author": "Jacob Wald",
-  "main": "dist/stimulus-controller.js",
-  "umd:main": "dist/stimulus-controller.umd.js",
-  "module": "dist/stimulus-controller.m.js",
-  "source": "src/stimulus-controller.js",
+  "main": "dist/tabs-controller.js",
+  "umd:main": "dist/tabs-controller.umd.js",
+  "module": "dist/tabs-controller.m.js",
+  "source": "src/tabs-controller.js",
   "license": "MIT",
   "scripts": {
     "start": "rollup -wc",
@@ -20,18 +20,14 @@
     "tabs"
   ],
   "dependencies": {
-    "@babel/runtime": "^7.3.1",
-    "karma-rollup-preprocessor": "^7.0.0",
-    "karma-webpack": "^3.0.5",
-    "stimulus": "^1.0.1",
-    "webpack": "^4.29.5",
-    "webpack-cli": "^3.2.3"
+    "stimulus": "^1.0.1"
   },
   "devDependencies": {
     "@babel/core": "^7.3.1",
     "@babel/plugin-proposal-class-properties": "^7.3.3",
     "@babel/plugin-transform-runtime": "^7.2.0",
     "@babel/preset-env": "^7.3.1",
+    "@babel/runtime": "^7.3.4",
     "babel-loader": "^8.0.5",
     "babel-plugin-external-helpers": "^6.22.0",
     "babel-plugin-syntax-async-functions": "^6.13.0",
@@ -46,6 +42,7 @@
     "karma-mocha-reporter": "^2.2.5",
     "karma-sinon-chai": "^2.0.2",
     "karma-sourcemap-loader": "^0.3.7",
+    "karma-webpack": "^3.0.5",
     "mocha": "^5.2.0",
     "rollup": "^1.2.1",
     "rollup-plugin-babel": "^4.3.2",
@@ -54,6 +51,8 @@
     "rollup-plugin-filesize": "^6.0.1",
     "rollup-plugin-node-resolve": "^4.0.0",
     "sinon": "^7.2.3",
-    "sinon-chai": "^3.3.0"
+    "sinon-chai": "^3.3.0",
+    "webpack": "^4.29.5",
+    "webpack-cli": "^3.2.3"
   }
 }
